@@ -264,8 +264,9 @@ def find_single_book(im_orig, im, scf, err_perim=0.05,
     im_cont = im.copy()
 
     # finds the contours and sorts by perimeter; the book's will be the first one
-    cnts = cv2.findContours(im_closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    cnts_sorted = sorted(cnts[1], key=lambda x: cv2.arcLength(x, closed=True))
+    cnts, h = cv2.findContours(im_closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    #print(cnts)
+    cnts_sorted = sorted(cnts, key=lambda x: cv2.arcLength(x, closed=True))
     found = []
     im_perim = 2 * (im.shape[0] + im.shape[1])
     for c in cnts_sorted:
@@ -329,7 +330,6 @@ try:
     im_name = argv[1]
 except:
     im_name = input('Image path:\n> ')
-print(im_name)
 
 im_path = os.path.join(os.getcwd(), im_name)
 im = cv2.imread(im_path)
@@ -337,7 +337,7 @@ im = cv2.imread(im_path)
 try:
     mode = 'none'
     im_cont, info, found = find_single_book(im, im, scf=1, err_perim=0.05,
-                                            denoise=True, simbg='none')
+                                            denoise=False, simbg='none')
     if found == 0:
         im_cont, info, found = find_single_book(im, im, scf=1, err_perim=0.05,
                                                 denoise=False, simbg='none')
