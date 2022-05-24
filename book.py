@@ -9,6 +9,7 @@ import os
 import argparse
 from imedit import *
 
+
 class Image():
 
     def __init__(self, im):
@@ -20,6 +21,7 @@ class Image():
         self.cntr = []
         self.book = Book()
         self.book_found = False
+
 
 class Book():
 
@@ -115,8 +117,8 @@ def find_single_book(image, scf, err_perim=0.05,
         print('No books found.')
         return None, None, 0
 
-def main():
 
+def main():
     ap = argparse.ArgumentParser()
 
     ap.add_argument("-p", "--path", required=True,
@@ -130,7 +132,7 @@ def main():
     try:
         mode = 'normal'
         find_single_book(image, scf=1, err_perim=0.05,
-                                denoise=False, mode=mode)
+                         denoise=False, mode=mode)
         if not image.book_found:
             find_single_book(image, scf=1, err_perim=0.05,
                              denoise=True, mode=mode)
@@ -148,14 +150,15 @@ def main():
             print('Book detected.')
             cv2.imshow('Book detected', image.edited)
             image.persp_corr = cv2.resize(four_point_transform(image.orig, path,
-                                                   image.cntr[:, 0, :]),
-                              None, fx=1 / 4, fy=1 / 4)
+                                                               image.cntr[:, 0, :]),
+                                          None, fx=1 / 4, fy=1 / 4)
             cv2.imshow('Book detected (perspective corrected)', image.persp_corr)
             cv2.imwrite('./res/book_persp_corr.jpg', image.persp_corr)
             cv2.waitKey(0)
             cv2.destroyAllWindows()
     except:
         traceback.print_exc()
+
 
 if __name__ == '__main__':
     main()
